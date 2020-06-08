@@ -1,0 +1,219 @@
+openapi: 3.0.0
+# Added by API Auto Mocking Plugin
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/DocSpera/patient-survey-api/1.0.0
+info:
+  description: Intelligent Scheduling Dashboard APIs
+  version: "1.0.0-alpha1"
+  title: Intelligent Scheduling Dashboard
+  x-logo:
+    url: https://docspera.com/assets/D3/pic/Logo-Full-White-Padded.png
+    backgroundColor: "#0096FA"
+    href: https://docspera.com
+  contact:
+    email: luca@docspera.com
+  license:
+    name: Proprietary
+tags:
+  - name: physician
+    x-displayName: "Authenticated Physician User"
+    description: |
+      apis available to an authenticated physician user
+paths:
+  /api/v1/intelligent-scheduling/patients:
+    get:
+      tags:
+        - physician
+      summary: Get patient priorities
+      operationId: getPatientPriorities
+      parameters:
+      - name: limit
+        in: query
+        description: cursor pagination per page limit
+        schema:
+          type: integer
+          format: int64
+          minimum: 0
+          maximum: 100
+          default: 50
+        required: false
+      - name: token
+        in: query
+        description: cursor pagination token
+        schema:
+          type: string
+        required: false
+      - name: policyid
+        in: query
+        description: prioritization policy override
+        schema:
+          type: string
+        required: false
+      - name: practiceId
+        in: query
+        description: practice id to show patients for. user must be a part of this practice or be an admin
+        schema:
+          type: integer
+          format: int64
+        required: false
+      - name: userId
+        in: query
+        description: user id to show patients for. user must be a part of this practice or be an admin. defaults to the current user
+        schema:
+          type: integer
+          format: int64
+          description: ae2 encoded user id
+        required: false
+      - name: filterKey
+        in: query
+        description: column to filter results by
+        schema:
+          type: string
+          description: filter key
+        required: false
+      - name: filterValue
+        in: query
+        description: value to filter results in filter column by
+        schema:
+          description: filter value
+        required: false
+      - name: sortBy
+        in: query
+        description: column to sort results by. this is applied after a filter
+        schema:
+          type: string
+      - name: sort
+        in: query
+        description: order to sort reults by. this is applied in conjunction with `sortBy` and after a filter
+        required: false
+        schema:
+          type: string
+          enum: ["asc", "desc"]
+          default: "desc"
+          description: direction to sort by
+      responses:
+        '200':
+          description: patients response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PatientPriorityResponse'
+        '400':
+          description: bad request, survey already completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: bad_request
+                description: survey already completed
+        '404':
+          description: survey not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: not_found
+                description: survey not found
+components:
+  securitySchemes:
+    signedCookie:
+      type: apiKey
+      in: cookie
+      name: docsperajwt
+      description: docspera signed jwt cookie
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    ErrorResponse:
+      type: object
+      required:
+        - error
+        - description
+      properties:
+        error:
+          type: string
+          description: error type
+        description:
+          type: string
+          description: error_message
+    PatientPriorityResponse:
+      type: object
+      required: 
+       - patientId
+       - calendarId
+       - name
+       - dob
+       - factors
+       - priority
+      properties:
+        patientId:
+          type: integer
+          format: int32
+          description: docspera patient id
+        calendarId:
+          type: integer
+          format: int32
+          description: docspera calendar id
+        name:
+          type: string
+          description: patient name
+        dob:
+          type: string
+          format: date
+          description: patient date of birth
+        factors:
+          type: object
+          required: 
+            - fallRisk
+            - pain
+            - functionality
+            - daysFromSurgery
+            - bmi
+            - comorbidities
+            - covid
+          properties:
+            fallRisk:
+              type: number
+              format: float
+            pain:
+              type: number
+              format: float
+            functionality:
+              type: number
+              format: float
+            daysFromSurgery:
+              type: integer
+              format: int32
+            bmi:
+              type: number
+              format: float
+            comorbidities:
+              type: array
+              items:
+                type: string
+            covid:
+              type: boolean
+        priority:
+          type: object
+          required:
+            - policyId
+            - priority
+          properties:
+            policyId:
+              type: string
+              format: uuid
+              description: policy id used for computing priority
+            priority:
+              type: number
+              format: double
+              description: computer patient priority
+          
+        
+      
