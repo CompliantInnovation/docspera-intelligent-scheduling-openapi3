@@ -109,16 +109,16 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 error: bad_request
-                description: survey already completed
-        '404':
-          description: survey not found
+                description: invalid parameters
+        '403':
+          description: bad request, survey already completed
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
-                error: not_found
-                description: survey not found
+                error: forbidden
+                description: unable to access specified resources
 components:
   securitySchemes:
     signedCookie:
