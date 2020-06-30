@@ -47,6 +47,48 @@ paths:
                       {"id": "5efbb937a792b1247d81c9bb", "name": "Physical Need", "description": "Followed by lower weight for Days from Surgery...", "category": "Case Urgency"},
                       {"id": "5efbb93a4ffa754b7270ee3f", "name": "Complication", "description": "Equally weighted by Age...", "category": "Outpatient"}
                     ]
+  /api/v1/intelligent-scheduling/preferences/policy:
+    get:
+      tags:
+        - physician
+      summary: Get prioiritization policy preference
+      operationId: getPrioritizationPolicyPreference
+      responses:
+        '200':
+          description: saved policy preference
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/PrioritizationPolicy'
+              examples:
+                'policy':
+                  summary: policy
+                  value:
+                      {"id": "5efbb86ba27c7a558c6e4fff", "name": "Days From Surgery", "description": "", "category": "Case Urgency"}
+    put:
+      tags:
+        - physician
+      summary: Save prioiritization policy preference
+      operationId: savePrioritizationPolicyPreference
+      responses:
+        '204':
+          description: preference saved
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: string
+                  description: policy id
+            examples:
+              'save policy':
+                value: {"id": "5efbb86ba27c7a558c6e4fff"}
+
   /api/v1/intelligent-scheduling/patients:
     get:
       tags:
