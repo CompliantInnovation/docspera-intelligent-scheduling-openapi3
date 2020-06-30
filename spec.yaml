@@ -21,6 +21,32 @@ tags:
     description: |
       apis available to an authenticated physician user
 paths:
+  /api/v1/intelligent-scheduling/policies:
+    get:
+      tags:
+        - physician
+      summary: Get prioiritization policies
+      operationId: getPrioritizationPolicies
+      responses:
+        '200':
+          description: policy list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PrioritizationPolicy'
+              examples:
+                'policy list':
+                  summary: policy list
+                  value:
+                    [
+                      {"id": "5efbb86ba27c7a558c6e4fff", "name": "Days From Surgery", "description": "", "category": "Case Urgency"},
+                      {"id": "5efbb8e20e20780692fb71af", "name": "Standard", "description": "Weighted heaviest equally...", "category": "Case Urgency"},
+                      {"id": "5efbb9024abcf5dfe33c0547", "name": "Disability", "description": "Equally weighted by pain...", "category": "Case Urgency"},
+                      {"id": "5efbb937a792b1247d81c9bb", "name": "Physical Need", "description": "Followed by lower weight for Days from Surgery...", "category": "Case Urgency"},
+                      {"id": "5efbb93a4ffa754b7270ee3f", "name": "Complication", "description": "Equally weighted by Age...", "category": "Outpatient"}
+                    ]
   /api/v1/intelligent-scheduling/patients:
     get:
       tags:
@@ -28,70 +54,70 @@ paths:
       summary: Get patient priorities
       operationId: getPatientPriorities
       parameters:
-      - name: limit
-        in: query
-        description: cursor pagination per page limit
-        schema:
-          type: integer
-          format: int64
-          minimum: 0
-          maximum: 100
-          default: 50
-        required: false
-      - name: token
-        in: query
-        description: cursor pagination token
-        schema:
-          type: string
-        required: false
-      - name: policyid
-        in: query
-        description: prioritization policy override
-        schema:
-          type: string
-        required: false
-      - name: practiceId
-        in: query
-        description: practice id to show patients for. user must be a part of this practice or be an admin
-        schema:
-          type: integer
-          format: int64
-        required: false
-      - name: userId
-        in: query
-        description: user id to show patients for. user must be a part of this practice or be an admin. defaults to the current user
-        schema:
-          type: integer
-          format: int64
-          description: ae2 encoded user id
-        required: false
-      - name: filterKey
-        in: query
-        description: column to filter results by
-        schema:
-          type: string
-          description: filter key
-        required: false
-      - name: filterValue
-        in: query
-        description: value to filter results in filter column by
-        schema:
-          description: filter value
-        required: false
-      - name: sortBy
-        in: query
-        description: column to sort results by. this is applied after a filter
-        schema:
-          type: string
-      - name: sort
-        in: query
-        description: order to sort reults by. this is applied in conjunction with `sortBy` and after a filter
-        required: false
-        schema:
-          type: string
-          enum: ["asc", "desc"]
-          default: "desc"
-          description: direction to sort by
+        - name: limit
+          in: query
+          description: cursor pagination per page limit
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+            maximum: 100
+            default: 50
+          required: false
+        - name: token
+          in: query
+          description: cursor pagination token
+          schema:
+            type: string
+          required: false
+        - name: policyid
+          in: query
+          description: prioritization policy override
+          schema:
+            type: string
+          required: false
+        - name: practiceId
+          in: query
+          description: practice id to show patients for. user must be a part of this practice or be an admin
+          schema:
+            type: integer
+            format: int64
+          required: false
+        - name: userId
+          in: query
+          description: user id to show patients for. user must be a part of this practice or be an admin. defaults to the current user
+          schema:
+            type: integer
+            format: int64
+            description: ae2 encoded user id
+          required: false
+        - name: filterKey
+          in: query
+          description: column to filter results by
+          schema:
+            type: string
+            description: filter key
+          required: false
+        - name: filterValue
+          in: query
+          description: value to filter results in filter column by
+          schema:
+            description: filter value
+          required: false
+        - name: sortBy
+          in: query
+          description: column to sort results by. this is applied after a filter
+          schema:
+            type: string
+        - name: sort
+          in: query
+          description: order to sort reults by. this is applied in conjunction with `sortBy` and after a filter
+          required: false
+          schema:
+            type: string
+            enum: ["asc", "desc"]
+            default: "desc"
+            description: direction to sort by
       responses:
         '200':
           description: patients response
@@ -143,15 +169,35 @@ components:
         description:
           type: string
           description: error_message
+    PrioritizationPolicy:
+      type: object
+      required:
+        - id
+        - name
+        - description
+        - category
+      properties:
+        id:
+          type: string
+          description: policy id
+        name:
+          type: string
+          description: name of policy
+        description:
+          type: string
+          description: policy description
+        category:
+          type: string
+          description: category of the policy
     PatientPriorityResponse:
       type: object
-      required: 
-       - patientId
-       - calendarId
-       - name
-       - dob
-       - factors
-       - priority
+      required:
+        - patientId
+        - calendarId
+        - name
+        - dob
+        - factors
+        - priority
       properties:
         patientId:
           type: integer
@@ -170,7 +216,7 @@ components:
           description: patient date of birth
         factors:
           type: object
-          required: 
+          required:
             - fallRisk
             - pain
             - functionality
@@ -214,6 +260,5 @@ components:
               type: number
               format: double
               description: computer patient priority
-          
-        
-      
+
+
