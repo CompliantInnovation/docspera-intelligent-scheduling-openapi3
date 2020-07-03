@@ -39,14 +39,8 @@ paths:
               examples:
                 'policy list':
                   summary: policy list
-                  value:
-                    [
-                      {"id": "5efbb86ba27c7a558c6e4fff", "name": "Days From Surgery", "description": "", "category": "Case Urgency"},
-                      {"id": "5efbb8e20e20780692fb71af", "name": "Standard", "description": "Weighted heaviest equally...", "category": "Case Urgency"},
-                      {"id": "5efbb9024abcf5dfe33c0547", "name": "Disability", "description": "Equally weighted by pain...", "category": "Case Urgency"},
-                      {"id": "5efbb937a792b1247d81c9bb", "name": "Physical Need", "description": "Followed by lower weight for Days from Surgery...", "category": "Case Urgency"},
-                      {"id": "5efbb93a4ffa754b7270ee3f", "name": "Complication", "description": "Equally weighted by Age...", "category": "Outpatient"}
-                    ]
+                  value: [{"id":"5efbb8e20e20780692fb71af","title":"Standard","description":"Weighted heaviest equally by Pain, Funcationality, Fall Risk\nFollowed by decreasing weights for Number of Comorbidities, BMI and Days from Surgery","order":1,"category":"Case Urgency"},{"id":"5efbb9024abcf5dfe33c0547","title":"Disability","description":"Equally weighted by Pain, Funcationality and Fall Risk","order":2,"category":"Case Urgency"},{"id":"5efbb93a4ffa754b7270ee3f","title":"Complication","description":"Equally weighted by Age, BMI, and Number of Comorbidities","order":4,"category":"Outpatient"},{"id":"5efbb937a792b1247d81c9bb","title":"Physical Need","description":"Equally weighted by Pain, Funcationality, Fall Risk and Age\nFollowed by lower weight for Days from Surgery","order":3,"category":"Case Urgency"},{"id":"5efbb86ba27c7a558c6e4fff","title":"Days From Surgery","description":"","order":0,"category":"Case Urgency"}]
+
   /api/v1/intelligent-scheduling/preferences/policy:
     get:
       tags:
@@ -59,12 +53,12 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/PrioritizationPolicy'
+                $ref: '#/components/schemas/PrioritizationPolicy'
               examples:
                 'policy':
                   summary: policy
                   value:
-                      {"id": "5efbb86ba27c7a558c6e4fff", "name": "Days From Surgery", "description": "", "category": "Case Urgency"}
+                    {"id": "5efbb86ba27c7a558c6e4fff", "name": "Days From Surgery", "description": "", "category": "Case Urgency"}
     put:
       tags:
         - physician
@@ -215,16 +209,21 @@ components:
       type: object
       required:
         - id
-        - name
+        - title
+        - order
         - description
         - category
       properties:
         id:
           type: string
           description: policy id
-        name:
+        title:
           type: string
           description: name of policy
+        order:
+          type: number
+          format: int32
+          description: relative order
         description:
           type: string
           description: policy description
