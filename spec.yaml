@@ -248,17 +248,17 @@ paths:
         '200':
           description: updated patient response
           content:
+            schema:
+              $ref: '#/components/schemas/PatientPriorityResponse'
+        '404':
+          description: patient not found
+          content:
             application/json:
               schema:
                 $ref: '#/components/schemas/PatientPriorityResponse'
               example:
                 error: not_found
                 description: patient not found
-        '404':
-          description: patient not found
-          content:
-            application/json:
-              schema:
         '403':
           description: forbidden
           content:
