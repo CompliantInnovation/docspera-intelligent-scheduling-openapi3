@@ -243,7 +243,7 @@ paths:
                 priority:
                   type: number
                   format: double
-                  description: computer patient priority
+                  description: computed patient priority
       responses:
         '200':
           description: updated patient response
@@ -387,6 +387,6 @@ components:
             priority:
               type: number
               format: double
-              description: computer patient priority
+              description: computed patient priority
 
 
