@@ -227,20 +227,20 @@ paths:
       summary: Update patient priority
       operationId: updatePatientPriority
       requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-              - id
-            properties:
-              id:
-                type: string
-                description: policy id
-          examples:
-            'save policy':
-              value: {"id": "5efbb86ba27c7a558c6e4fff"}
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: string
+                  description: policy id
+            examples:
+              'save policy':
+                value: {"id": "5efbb86ba27c7a558c6e4fff"}
       responses:
         '200':
           description: updated patient response
