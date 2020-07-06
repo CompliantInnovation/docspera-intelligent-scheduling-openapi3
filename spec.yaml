@@ -233,14 +233,17 @@ paths:
             schema:
               type: object
               required:
-                - id
+                - policyId
+                - priority
               properties:
-                id:
+                policyId:
                   type: string
-                  description: policy id
-            examples:
-              'save policy':
-                value: {"id": "5efbb86ba27c7a558c6e4fff"}
+                  format: uuid
+                  description: policy id used for computing priority
+                priority:
+                  type: number
+                  format: double
+                  description: computer patient priority
       responses:
         '200':
           description: updated patient response
@@ -248,24 +251,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PatientPriorityResponse'
+              example:
+                error: not_found
+                description: patient not found
         '404':
           description: patient not found
           content:
             application/json:
               schema:
-                type: object
-                required:
-                  - policyId
-                  - priority
-                properties:
-                  policyId:
-                    type: string
-                    format: uuid
-                    description: policy id used for computing priority
-                  priority:
-                    type: number
-                    format: double
-                    description: computer patient priority
         '403':
           description: forbidden
           content:
