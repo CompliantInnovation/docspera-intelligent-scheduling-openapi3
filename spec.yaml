@@ -16,15 +16,15 @@ info:
   license:
     name: Proprietary
 tags:
-  - name: physician
-    x-displayName: "Authenticated Physician User"
+  - name: user
+    x-displayName: "Authenticated User"
     description: |
-      apis available to an authenticated physician user
+      apis available to an authenticated user
 paths:
   /api/v1/intelligent-scheduling/policies:
     get:
       tags:
-        - physician
+        - user
       summary: Get prioiritization policies
       operationId: getPrioritizationPolicies
       responses:
@@ -41,10 +41,30 @@ paths:
                   summary: policy list
                   value: [{"id":"5efbb8e20e20780692fb71af","title":"Standard","description":"Weighted heaviest equally by Pain, Funcationality, Fall Risk\nFollowed by decreasing weights for Number of Comorbidities, BMI and Days from Surgery","order":1,"category":"Case Urgency"},{"id":"5efbb9024abcf5dfe33c0547","title":"Disability","description":"Equally weighted by Pain, Funcationality and Fall Risk","order":2,"category":"Case Urgency"},{"id":"5efbb93a4ffa754b7270ee3f","title":"Complication","description":"Equally weighted by Age, BMI, and Number of Comorbidities","order":4,"category":"Outpatient"},{"id":"5efbb937a792b1247d81c9bb","title":"Physical Need","description":"Equally weighted by Pain, Funcationality, Fall Risk and Age\nFollowed by lower weight for Days from Surgery","order":3,"category":"Case Urgency"},{"id":"5efbb86ba27c7a558c6e4fff","title":"Days From Surgery","description":"","order":0,"category":"Case Urgency"}]
 
+  /api/v1/intelligent-scheduling/users:
+    get:
+      tags:
+        - user
+      summary: Get shared calendar users
+      operationId: getSharedCalendarUsers
+      responses:
+        '200':
+          description: user list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScheduleUser'
+              examples:
+                'user list':
+                  summary: user list
+                  value: [{"id":111,"name":"Luca Physician","practiceId":212},{"id":212,"name":"Sami Physician","practiceId":212}]
+
   /api/v1/intelligent-scheduling/preferences/policy:
     get:
       tags:
-        - physician
+        - user
       summary: Get prioiritization policy preference
       operationId: getPrioritizationPolicyPreference
       responses:
@@ -61,7 +81,7 @@ paths:
                     {"id": "5efbb86ba27c7a558c6e4fff", "name": "Days From Surgery", "description": "", "category": "Case Urgency"}
     put:
       tags:
-        - physician
+        - user
       summary: Save prioiritization policy preference
       operationId: savePrioritizationPolicyPreference
       responses:
@@ -86,7 +106,7 @@ paths:
   /api/v1/intelligent-scheduling/patients:
     get:
       tags:
-        - physician
+        - user
       summary: Get patient priorities
       operationId: getPatientPriorities
       parameters:
@@ -193,7 +213,7 @@ paths:
         required: true
     get:
       tags:
-        - physician
+        - user
       summary: Get patient priority
       operationId: getPatientPriority
       responses:
@@ -223,7 +243,7 @@ paths:
                 description: unable to access specified resources
     put:
       tags:
-        - physician
+        - user
       summary: Update patient priority
       operationId: updatePatientPriority
       requestBody:
@@ -317,6 +337,24 @@ components:
         category:
           type: string
           description: category of the policy
+    ScheduleUser:
+      type: object
+      required:
+        - id
+        - name
+        - practiceId
+      properties:
+        id:
+          type: number
+          format: int32
+          description: user id
+        name:
+          type: string
+          description: name
+        practiceId:
+          type: number
+          format: int32
+          description: practice id
     PatientPriorityResponse:
       type: object
       required:
