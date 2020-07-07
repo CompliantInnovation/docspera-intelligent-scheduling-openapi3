@@ -264,12 +264,15 @@ paths:
                   type: number
                   format: double
                   description: computed patient priority
+            example:
+                {"policyId":"5efbb8e20e20780692fb71af","priority":0.05}
       responses:
         '200':
           description: updated patient response
           content:
-            schema:
-              $ref: '#/components/schemas/PatientPriorityResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatientPriorityResponse'
         '404':
           description: patient not found
           content:
