@@ -361,6 +361,7 @@ components:
     PatientPriorityResponse:
       type: object
       required:
+        - id
         - patientId
         - calendarId
         - name
@@ -368,6 +369,10 @@ components:
         - factors
         - priority
       properties:
+        id:
+          type: string
+          length: 24
+          description: survey recipient id
         patientId:
           type: integer
           format: int32
