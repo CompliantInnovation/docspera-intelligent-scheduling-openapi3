@@ -126,7 +126,7 @@ paths:
           schema:
             type: string
           required: false
-        - name: policyid
+        - name: policyId
           in: query
           description: prioritization policy override
           schema:
