@@ -201,15 +201,14 @@ paths:
               example:
                 error: forbidden
                 description: unable to access specified resources
-  /api/v1/intelligent-scheduling/patients/{patientId}:
+  /api/v1/intelligent-scheduling/patients/{recipientId}:
     parameters:
-      - name: patientId
+      - name: recipientId
         in: path
-        description: patient id
+        description: recipient id
         schema:
-          type: integer
-          format: int32
-          description: docspera patient id
+          type: string
+          description: survey recipient id
         required: true
     get:
       tags:
@@ -279,6 +278,60 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PatientPriorityResponse'
+              example:
+                error: not_found
+                description: patient not found
+        '403':
+          description: forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: forbidden
+                description: unable to access specified resources
+  /api/v1/intelligent-scheduling/patients/{recipientId}/survey:
+    parameters:
+      - name: recipientId
+        in: path
+        description: recipient id
+        schema:
+          type: string
+          description: survey recipient id
+        required: true
+    get:
+      tags:
+        - user
+      summary: Get recipient survey and answers
+      operationId: getSurveyAnswers
+      responses:
+        '200':
+          description: survey answers response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - questionId
+                    - prompt
+                    - response
+                  properties:
+                    questionId:
+                      type: string
+                      description: survey question id
+                    prompt:
+                      type: string
+                      description: survey question prompt
+                    response:
+                      description: survey response value
+        '404':
+          description: patient not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
               example:
                 error: not_found
                 description: patient not found
