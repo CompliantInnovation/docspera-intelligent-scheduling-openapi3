@@ -404,6 +404,7 @@ components:
         - id
         - patientId
         - calendarId
+        - provider
         - name
         - dob
         - factors
@@ -421,6 +422,24 @@ components:
           type: integer
           format: int32
           description: docspera calendar id
+        provider:
+          type: object
+          required:
+            - id
+            - name
+            - avatar
+          properties:
+            id:
+              type: number
+              format: int32
+              description: ae2 encoded user id
+            name:
+              type: string
+              description: provider name
+            avatar:
+              type: string
+              format: uri
+              description: uri of the avatar for the user
         name:
           type: string
           description: patient name
