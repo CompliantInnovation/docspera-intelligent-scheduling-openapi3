@@ -493,6 +493,22 @@ components:
               type: number
               format: double
               description: computed patient priority
+        rebooked:
+          type: object
+          required:
+            - date
+            - timestamp
+          properties:
+            date:
+              type: string
+              format: date-time
+              description: date the patient was booked for
+              example: "2021-01-30T08:30:00Z"
+            timestamp:
+              type: string
+              format: date-time
+              description: timestamp the patient was rebooked in the UI
+              example: "2021-01-30T08:30:00Z"
     SurveyQuestion:
       type: object
       required:
