@@ -147,24 +147,29 @@ paths:
             format: int64
             description: ae2 encoded user id
           required: false
-        - name: filterKey
-          in: query
-          description: column to filter results by
-          schema:
-            type: string
-            description: filter key
-          required: false
-        - name: filterValue
-          in: query
-          description: value to filter results in filter column by
-          schema:
-            description: filter value
-          required: false
         - name: sortBy
           in: query
           description: column to sort results by. this is applied after a filter
           schema:
             type: string
+        - name: priority_priority
+          in: query
+          description: array of priority values to filter results by
+          schema:
+            type: array
+            items:
+              type: string
+              enum: ["high", "med", "low"]
+              description: priority value
+        - name: status
+          in: query
+          description: array of status values to filter results by
+          schema:
+            type: array
+            items:
+              type: string
+              enum: ["0", "1", "2", "3"]
+              description: status value
         - name: sort
           in: query
           description: order to sort reults by. this is applied in conjunction with `sortBy` and after a filter
