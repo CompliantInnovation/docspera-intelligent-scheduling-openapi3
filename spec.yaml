@@ -336,6 +336,83 @@ paths:
               example:
                 error: forbidden
                 description: unable to access specified resources
+  /api/v1/intelligent-scheduling/cancellations:
+    get:
+      tags:
+        - user
+      summary: Get cancelled cases
+      operationId: getCancelledCases
+      parameters:
+        - name: limit
+          in: query
+          description: cursor pagination per page limit
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+            maximum: 100
+            default: 50
+          required: false
+        - name: token
+          in: query
+          description: cursor pagination token
+          schema:
+            type: string
+          required: false
+        - name: ownerId
+          in: query
+          description: array of owner ids to show cancellations for. user must be a part of this practice or be an admin.
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              description: ae2 encoded user id
+          required: false
+      responses:
+        '200':
+          description: patients response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cancellation'
+              example:
+                [
+                  {
+                    "calendarId": 2339453,
+                    "case": "Shoulder - Not Assigned",
+                    "mrn": "SS3905948393",
+                    "name": "Shirley Sanders",
+                    "dob": 19461021,
+                    "dos": 20210726160000,
+                    "duration": 60,
+                    "provider": {
+                      "id": 219741,
+                      "name": "VDH QA Design Quality",
+                      "avatar": null
+                    }
+                  }
+                ]
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: bad_request
+                description: invalid parameters
+        '403':
+          description: forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: forbidden
+                description: unable to access specified resources
 components:
   securitySchemes:
     signedCookie:
@@ -428,23 +505,7 @@ components:
           format: int32
           description: docspera calendar id
         provider:
-          type: object
-          required:
-            - id
-            - name
-            - avatar
-          properties:
-            id:
-              type: number
-              format: int32
-              description: ae2 encoded user id
-            name:
-              type: string
-              description: provider name
-            avatar:
-              type: string
-              format: uri
-              description: uri of the avatar for the user
+          $ref: '#/components/schemas/Provider'
         name:
           type: string
           description: patient name
@@ -514,6 +575,62 @@ components:
               format: date-time
               description: timestamp the patient was rebooked in the UI
               example: "2021-01-30T08:30:00Z"
+    Provider:
+      type: object
+      required:
+        - id
+        - name
+        - avatar
+      properties:
+        id:
+          type: number
+          format: int32
+          description: ae2 encoded user id
+        name:
+          type: string
+          description: provider name
+        avatar:
+          type: string
+          format: uri
+          description: uri of the avatar for the user
+    Cancellation:
+      type: object
+      required:
+        - calendarId
+        - provider
+        - case
+        - mrn
+        - name
+        - dob
+        - dos
+        - duration
+      properties:
+        calendarId:
+          type: integer
+          format: int32
+          description: docspera calendar id
+        provider:
+          $ref: '#/components/schemas/Provider'
+        name:
+          type: string
+          description: patient name
+        mrn:
+          type: string
+          description: patient mrn
+        case:
+          type: string
+          description: case title / procedure name
+        dob:
+          type: integer
+          format: date
+          description: patient date of birth, in `Ymd` format
+        dos:
+          type: integer
+          format: date
+          description: original date of surgery date of birth, in `YmdHis` format
+        duration:
+          type: integer
+          description: duration, in minutes, of the original case booking
     SurveyQuestion:
       type: object
       required:
