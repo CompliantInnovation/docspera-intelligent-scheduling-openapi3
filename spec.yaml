@@ -413,6 +413,61 @@ paths:
               example:
                 error: forbidden
                 description: unable to access specified resources
+  /api/v1/intelligent-scheduling/events/{calendarId}:
+    parameters:
+      - name: calendarId
+        in: path
+        description: calendar id
+        schema:
+          type: integer
+          format: ae2 encoded
+          description: calendar id
+        required: true
+    put:
+      tags:
+        - user
+      summary: Rebook evet
+      operationId: rebookEvent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - start
+                - end
+              properties:
+                start:
+                  type: integer
+                  format: datetime integer, in YmdHis format
+                  description: start time to rebook event to
+                  example: 20220228120000
+                end:
+                  type: integer
+                  format: datetime integer, in YmdHis format
+                  description: end time to rebook event to
+                  example: 20220228133000
+      responses:
+        '200':
+          description: succesfully rebooked event
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: bad_request
+                description: invalid parameters
+        '403':
+          description: forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: forbidden
+                description: unable to access specified resources
 components:
   securitySchemes:
     signedCookie:
