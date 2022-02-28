@@ -426,7 +426,7 @@ paths:
     put:
       tags:
         - user
-      summary: Rebook evet
+      summary: Rebook event
       operationId: rebookEvent
       requestBody:
         content:
