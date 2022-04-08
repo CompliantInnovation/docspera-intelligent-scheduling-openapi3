@@ -468,6 +468,70 @@ paths:
               example:
                 error: forbidden
                 description: unable to access specified resources
+  /rpc/v1/createSurveysFromCalendarIds:
+    post:
+      tags:
+        - user
+      summary: Bulk send surveys to patients
+      operationId: createSurveysFromCalendarIds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - calendarIds
+              properties:
+                calendarIds:
+                  type: array
+                  example: [111,222,333,444]
+                  items:
+                    type: integer
+                    description: calendar ID to send
+      responses:
+        '200':
+          description: succesfully send surveys
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - surveys
+                properties:
+                  surveys:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - calendarId
+                        - surveyId
+                      properties:
+                        calendarId:
+                          type: integer
+                          description: calendar ID of the sucessfully created survey
+                          example: 111
+                        surveyId:
+                          type: string
+                          format: uuid
+                          description: survey ID of the sucessfully created survey
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: bad_request
+                description: invalid parameters
+        '403':
+          description: forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: forbidden
+                description: unable to access specified resources
 components:
   securitySchemes:
     signedCookie:
