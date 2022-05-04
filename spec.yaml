@@ -468,6 +468,65 @@ paths:
               example:
                 error: forbidden
                 description: unable to access specified resources
+  /api/v1/intelligent-scheduling/users/{userId}/bookings:
+    parameters:
+      - name: userId
+        in: path
+        description: user id to get bookings for
+        schema:
+          type: integer
+          format: ae2 encoded
+          description: user id
+        required: true
+    get:
+      tags:
+        - user
+      summary: Get bookings
+      operationId: getBookings
+      parameters:
+        - name: start_date
+          in: query
+          description: start date to get bookings for
+          schema:
+            type: integer
+            format: datetime integer, in Ymd format
+            description: start date to get bookings for
+            example: 20220228
+        - name: end_date
+          in: query
+          description: end date to get bookings for
+          schema:
+            type: integer
+            format: datetime integer, in Ymd format
+            description: start date to get bookings for
+            example: 20220228
+      responses:
+        '200':
+          description: event bookings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EventBooking'
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: bad_request
+                description: invalid parameters
+        '403':
+          description: forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: forbidden
+                description: unable to access specified resources
   /rpc/v1/createSurveysFromCalendarIds:
     post:
       tags:
@@ -556,6 +615,31 @@ components:
         description:
           type: string
           description: error_message
+    EventBooking:
+      type: object
+      required:
+        - date
+        - hoursAvailable
+        - percentBooked
+        - totalBooked
+      properties:
+        date:
+          type: string
+          format: date
+          description: date of the event in Ymd format
+          example: '20220228'
+        hoursAvailable:
+          type: number
+          description: number of hours available
+          example: 4.5
+        percentBooked:
+          type: integer
+          description: percent of hours booked
+          example: 0.5
+        totalBooked:
+          type: integer
+          description: total cases booked
+          example: 5
     PrioritizationPolicy:
       type: object
       required:
