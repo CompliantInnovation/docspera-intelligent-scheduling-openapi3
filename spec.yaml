@@ -301,7 +301,7 @@ paths:
       summary: Delete a patient
       operationId: deletePatientPriority
       responses:
-        '200':
+        '204':
           description: deleted patient
         '404':
           description: patient not found
