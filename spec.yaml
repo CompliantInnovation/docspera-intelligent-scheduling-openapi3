@@ -282,7 +282,33 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PatientPriorityResponse'
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: not_found
+                description: patient not found
+        '403':
+          description: forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: forbidden
+                description: unable to access specified resources
+    delete:
+      tags:
+        - user
+      summary: Delete a patient
+      operationId: deletePatientPriority
+      responses:
+        '200':
+          description: deleted patient
+        '404':
+          description: patient not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
               example:
                 error: not_found
                 description: patient not found
