@@ -439,6 +439,37 @@ paths:
               example:
                 error: forbidden
                 description: unable to access specified resources
+  /api/v1/intelligent-scheduling/events:
+    put:
+      tags:
+        - user
+      summary: Rebook multiple events
+      operationId: rebookEvents
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - calendarId
+                - start
+                - end
+              properties:
+                calendarId:
+                  type: integer
+                  format: ae2 encoded
+                  description: calendar id
+                  example: 111
+                start:
+                  type: integer
+                  format: datetime integer, in YmdHis format
+                  description: start time to rebook event to
+                  example: 20220228120000
+                end:
+                  type: integer
+                  format: datetime integer, in YmdHis format
+                  description: end time to rebook event to
+                  example: 20220228133000
   /api/v1/intelligent-scheduling/events/{calendarId}:
     parameters:
       - name: calendarId
