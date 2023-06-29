@@ -451,25 +451,51 @@ paths:
             schema:
               type: object
               required:
-                - calendarId
-                - start
-                - end
+                - events
               properties:
-                calendarId:
-                  type: integer
-                  format: ae2 encoded
-                  description: calendar id
-                  example: 111
-                start:
-                  type: integer
-                  format: datetime integer, in YmdHis format
-                  description: start time to rebook event to
-                  example: 20220228120000
-                end:
-                  type: integer
-                  format: datetime integer, in YmdHis format
-                  description: end time to rebook event to
-                  example: 20220228133000
+                events:
+                  type: object
+                  required:
+                    - calendarId
+                    - start
+                    - end
+                  properties:
+                    calendarId:
+                      type: integer
+                      format: ae2 encoded
+                      description: calendar id
+                      example: 111
+                    start:
+                      type: integer
+                      format: datetime integer, in YmdHis format
+                      description: start time to rebook event to
+                      example: 20220228120000
+                    end:
+                      type: integer
+                      format: datetime integer, in YmdHis format
+                      description: end time to rebook event to
+                      example: 20220228133000
+      responses:
+        '200':
+          description: succesfully rebooked events
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: bad_request
+                description: invalid parameters
+        '403':
+          description: forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: forbidden
+                description: unable to access specified resources
   /api/v1/intelligent-scheduling/events/{calendarId}:
     parameters:
       - name: calendarId
