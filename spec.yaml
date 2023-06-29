@@ -454,27 +454,29 @@ paths:
                 - events
               properties:
                 events:
-                  type: object
-                  required:
-                    - calendarId
-                    - start
-                    - end
-                  properties:
-                    calendarId:
-                      type: integer
-                      format: ae2 encoded
-                      description: calendar id
-                      example: 111
-                    start:
-                      type: integer
-                      format: datetime integer, in YmdHis format
-                      description: start time to rebook event to
-                      example: 20220228120000
-                    end:
-                      type: integer
-                      format: datetime integer, in YmdHis format
-                      description: end time to rebook event to
-                      example: 20220228133000
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - calendarId
+                      - start
+                      - end
+                    properties:
+                      calendarId:
+                        type: integer
+                        format: ae2 encoded
+                        description: calendar id
+                        example: 111
+                      start:
+                        type: integer
+                        format: datetime integer, in YmdHis format
+                        description: start time to rebook event to
+                        example: 20220228120000
+                      end:
+                        type: integer
+                        format: datetime integer, in YmdHis format
+                        description: end time to rebook event to
+                        example: 20220228133000
       responses:
         '200':
           description: succesfully rebooked events
